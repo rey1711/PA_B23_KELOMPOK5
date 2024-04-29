@@ -1,28 +1,25 @@
 from prettytable import PrettyTable
 from colorama import Fore
 
-def display_menu_and_stock(barang, order_type="pembelian"):
-    from prettytable import PrettyTable
-    from colorama import Fore
+def display_menu_and_stock(self, order_type="pembelian"):
+    try:
+        if order_type == "pembelian" or order_type == "penyewaan":
+            connection = self.connect_to_database()
+            if connection:
+                cursor = connection.cursor(dictionary=True)
+                if order_type == "pembelian":
+                    cursor.execute("SELECT id_barang, nama_barang, harga, stock, spek FROM barang;")
+                elif order_type == "penyewaan":
+                    cursor.execute("SELECT id_barang, nama_barang, harga, stock, spek FROM barang;")
+                menu = cursor.fetchall()
+                connection.close()
+                return menu
+        else:
+            raise ValueError("Invalid order type. Please choose 'pembelian' or 'penyewaan'.")
+    except Exception as e:
+        print(Fore.RED + f"An error occurred: {str(e)}")
+        return []
 
-    table = PrettyTable()
-    table.field_names = [Fore.BLUE + "id_barang", Fore.BLUE + "nama_barang", Fore.BLUE + "harga", Fore.BLUE + "Stock"]
-
-    for laptop in barang:
-        try:
-            id_barang = laptop.get('id_barang', 'ID not available')
-            name = laptop['nama_barang']
-            price = laptop.get('harga', 'Price not available')
-            stock = laptop.get('stock', 'Stock not available')
-
-            if order_type == "penyewaan":
-                price /= 50
-
-            table.add_row([Fore.BLUE + str(id_barang), Fore.BLUE + name, Fore.BLUE + str(price), Fore.BLUE + str(stock)])
-        except KeyError as e:
-            print(f"Error: Missing key in laptop data - {e}")
-
-    print(table.get_string().capitalize())
 
 def display_pembelian_history(shop):
     try:

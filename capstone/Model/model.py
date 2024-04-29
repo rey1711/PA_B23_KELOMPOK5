@@ -85,77 +85,65 @@ class Customer(User):
          raise ValueError("Invalid username or password.")
 
    def place_order(self, order_type, id_barang, quantity, days=1):
-        try:
-            found = False
-            id_barang = int(id_barang)
-            for laptop in self.shop.barang:
-                if laptop.get('id_barang') == id_barang:
-                    stock = int(laptop['stock'])
-                    harga = int(laptop['harga']) 
-                    nama_barang = laptop['nama_barang']
-                    total_harga = harga * quantity 
-                    if stock >= quantity:
-                        order = (id_barang, quantity, order_type, days, total_harga) 
-                        self.shop.order_queue.append(order)
-
-                        try:
-                            connection = self.shop.connect_to_database()
-                            if connection:
-                                cursor = connection.cursor(dictionary=True)
-                                if order_type == "pembelian":
-                                    cursor.execute("""
-                                        INSERT INTO transaksi (id_transaksi, id_barang, total_barang)
-                                        VALUES (DEFAULT, %s, %s)
-                                    """, (id_barang, quantity)) 
-                                    
-                                    cursor.execute("""
-                                        INSERT INTO pembelian (id_pembelian, id_transaksi, tanggal_pembelian, total_harga)
-                                        VALUES (DEFAULT, LAST_INSERT_ID(), CURRENT_DATE(), %s)
-                                    """, (total_harga,))
-
-
-                                elif order_type == "penyewaan":
-                                    # Meminta input jaminan dari pengguna
-                                    jaminan = input("Masukkan jaminan: ")
-
-                                    cursor.execute("""
-                                        INSERT INTO transaksi (id_transaksi, id_barang, total_barang)
-                                        VALUES (DEFAULT, %s, %s)
-                                    """, (id_barang, quantity)) 
-
-                                    # Hitung tanggal kembali berdasarkan jumlah hari sewa
-                                    from datetime import datetime, timedelta
-                                    today = datetime.now()
-                                    return_date = today + timedelta(days=days)
-
-                                    cursor.execute("""
-                                        INSERT INTO penyewaan (id_penyewaan, id_transaksi, tanggal_minjam, jaminan, tanggal_kembali, total_harga)
-                                        VALUES (DEFAULT, LAST_INSERT_ID(), CURRENT_DATE(), %s, %s, %s)
-                                    """, (jaminan, return_date.strftime('%Y-%m-%d'), total_harga))
-
-                                connection.commit()
-                                connection.close()
-                        except Exception as e:
-                            print(Fore.RED + f"Failed to insert transaction data: {str(e)}")
-
-                        if order_type == "pembelian":  # Check order type
-                            laptop['stock'] = str(stock - quantity)
-                            print(Fore.GREEN + f"Order placed by {self.username}: {quantity} {nama_barang.capitalize()}(s)")
-                        elif order_type == "penyewaan":  # If order type is "penyewaan"
-                            price_per_day = harga / 50  # Divide price by 50 for rental
-                            total_harga = price_per_day * days * quantity
-                            print(Fore.GREEN + f"Order placed by {self.username}: {quantity} {nama_barang.capitalize()}(s) for {days} days. Total price: ${total_harga}")
-
-                        found = True
-                        break
-                    else:
-                        raise ValueError(f"Insufficient stock for {nama_barang.capitalize()}")
-            if not found:
-                raise ValueError(f"Laptop with ID {id_barang} not found")
-        except ValueError as e:
-            print(Fore.RED + str(e))
-        except Exception as e:
-            print(Fore.RED + f"An error occurred: {str(e)}")
+      try:
+         found = False
+         id_barang = int(id_barang)
+         for laptop in self.shop.barang:
+               if laptop.get('id_barang') == id_barang:
+                  stock = int(laptop['stock'])
+                  harga = int(laptop['harga']) 
+                  nama_barang = laptop['nama_barang']
+                  total_harga = harga * quantity 
+                  if stock >= quantity:
+                     order = (id_barang, quantity, order_type, days, total_harga) 
+                     self.shop.order_queue.append(order)
+                     try:
+                           connection = self.shop.connect_to_database()
+                           if connection:
+                              cursor = connection.cursor(dictionary=True)
+                              if order_type == "pembelian":
+                                 cursor.execute("""
+                                       INSERT INTO transaksi (id_transaksi, id_barang, total_barang)
+                                       VALUES (DEFAULT, %s, %s)
+                                 """, (id_barang, quantity)) 
+                                 cursor.execute("""
+                                       INSERT INTO pembelian (id_pembelian, id_transaksi, tanggal_pembelian, total_harga)
+                                       VALUES (DEFAULT, LAST_INSERT_ID(), CURRENT_DATE(), %s)
+                                 """, (total_harga,))
+                              elif order_type == "penyewaan":
+                                 jaminan = input("Masukkan jaminan: ")
+                                 cursor.execute("""
+                                       INSERT INTO transaksi (id_transaksi, id_barang, total_barang)
+                                       VALUES (DEFAULT, %s, %s)
+                                 """, (id_barang, quantity)) 
+                                 from datetime import datetime, timedelta
+                                 today = datetime.now()
+                                 return_date = today + timedelta(days=days)
+                                 cursor.execute("""
+                                       INSERT INTO penyewaan (id_penyewaan, id_transaksi, tanggal_minjam, jaminan, tanggal_kembali, total_harga)
+                                       VALUES (DEFAULT, LAST_INSERT_ID(), CURRENT_DATE(), %s, %s, %s)
+                                 """, (jaminan, return_date.strftime('%Y-%m-%d'), total_harga))
+                              connection.commit()
+                              connection.close()
+                     except Exception as e:
+                           print(Fore.RED + f"Failed to insert transaction data: {str(e)}")
+                     if order_type == "pembelian":  
+                           laptop['stock'] = str(stock - quantity)
+                           print(Fore.GREEN + f"Order placed by {self.username}: {quantity} {nama_barang.capitalize()}(s)")
+                     elif order_type == "penyewaan":  
+                           price_per_day = harga / 50  
+                           total_harga = price_per_day * days * quantity
+                           print(Fore.GREEN + f"Order placed by {self.username}: {quantity} {nama_barang.capitalize()}(s) for {days} days. Total price: ${total_harga}")
+                     found = True
+                     break
+                  else:
+                     raise ValueError(f"Insufficient stock for {nama_barang.capitalize()}")
+         if not found:
+               raise ValueError(f"Laptop with ID {id_barang} not found")
+      except ValueError as e:
+         print(Fore.RED + str(e))
+      except Exception as e:
+         print(Fore.RED + f"An error occurred: {str(e)}")
 
 
 
@@ -171,25 +159,25 @@ class LaptopShop:
       self.admins = self.fetch_admins_from_database()
       
    def fetch_purchase_history_from_database(self):
-    try:
-        connection = self.connect_to_database()
-        if connection:
-            cursor = connection.cursor(dictionary=True)
-            cursor.execute("""
-                SELECT pembelian.id_pembelian, pembelian.tanggal_pembelian, pembelian.total_harga, 
-                transaksi.total_barang
-                FROM pembelian
-                INNER JOIN transaksi ON pembelian.id_pembelian = transaksi.total_barang;
-            """)
-            purchase_history = cursor.fetchall()
-            connection.close()
-            return purchase_history
-        else:
-            print("Failed to connect to database")
-            return []
-    except Exception as e:
-        print(Fore.RED + f"An error occurred: {str(e)}")
-        return []
+      try:
+         connection = self.connect_to_database()
+         if connection:
+               cursor = connection.cursor(dictionary=True)
+               cursor.execute("""
+                  SELECT pembelian.id_pembelian, pembelian.tanggal_pembelian, pembelian.total_harga, 
+                  transaksi.total_barang
+                  FROM pembelian
+                  INNER JOIN transaksi ON pembelian.id_pembelian = transaksi.total_barang;
+               """)
+               purchase_history = cursor.fetchall()
+               connection.close()
+               return purchase_history
+         else:
+               print("Failed to connect to database")
+               return []
+      except Exception as e:
+         print(Fore.RED + f"An error occurred: {str(e)}")
+         return []
 
    def fetch_laptops_from_database(self):
       try:
@@ -283,75 +271,54 @@ class LaptopShop:
    def calculate_total_income(self):
       return self.total_income
    
-   def update_laptop(self, laptop_name, new_price, new_stock):
-      try:
-         laptop_found = False
-         for laptop in self.barang:
-               if laptop['nama_barang'].lower() == laptop_name.lower():
-                  laptop['harga'] = new_price
-                  laptop['stock'] = new_stock
-                  laptop_found = True
-                  print(f"Laptop '{laptop_name}' updated successfully.")
-                  break
-         
-         if not laptop_found:
-               raise ValueError(f"Laptop '{laptop_name}' not found.")
-      except ValueError as e:
-         print(Fore.RED + str(e))
-      except Exception as e:
-         print(Fore.RED + f"An error occurred: {str(e)}")
-
-   def add_new_laptop(self, laptop_name, price, stock, location):
-      try:
-         if location not in ['beginning', 'middle', 'end']:
-               raise ValueError("Invalid location. Please choose 'beginning', 'middle', or 'end'.")
-         
-         if location == 'beginning':
-               self.barang.insert(0, {"nama_barang": laptop_name, "harga": price, "stock": stock})
-         elif location == 'end':
-               self.barang.append({"nama_barang": laptop_name, "harga": price, "stock": stock})
-         elif location == 'middle':
-               middle_index = len(self.barang) // 2
-               self.barang.insert(middle_index, {"nama_barang": laptop_name, "harga": price, "stock": stock})
-      except ValueError as e:
-         print(Fore.RED + str(e))
-      except Exception as e:
-         print(Fore.RED + f"An error occurred: {str(e)}")
-
-
-   def del_laptop(self, laptop_name):
-      try:
-         laptop_found = False
-         for laptop in self.barang:
-               if laptop['nama_barang'].lower() == laptop_name.lower():
-                  self.barang.remove(laptop)
-                  laptop_found = True
-                  print(f"Laptop '{laptop_name}' deleted successfully.")
-                  break
-         
-         if not laptop_found:
-               print(f"Laptop '{laptop_name}' not found.")
-      except Exception as e:
-         print(Fore.RED + f"An error occurred: {str(e)}")
-
-   def update_return_date(self, id_penyewaan, new_return_date):
+   def add_new_laptop(self, laptop_name, price, stock, spek):
       try:
          connection = self.connect_to_database()
          if connection:
                cursor = connection.cursor()
                cursor.execute("""
-                  UPDATE penyewaan
-                  SET tanggal_kembali = %s
-                  WHERE id_penyewaan = %s;
-               """, (new_return_date, id_penyewaan))
+                  INSERT INTO barang (nama_barang, harga, stock, spek)
+                  VALUES (%s, %s, %s, %s)
+               """, (laptop_name, price, stock, spek))
+
                connection.commit()
                connection.close()
-               print(Fore.GREEN + f"Return date updated successfully for rental ID: {id_penyewaan}")
-         else:
-               print(Fore.RED + "Failed to connect to database")
+               print(Fore.GREEN + f"Laptop '{laptop_name}' added successfully.")
       except Exception as e:
          print(Fore.RED + f"An error occurred: {str(e)}")
-      
+
+   def update_laptop(self, laptop_id, new_price, new_stock, new_spek):
+      try:
+         connection = self.connect_to_database()
+         if connection:
+               cursor = connection.cursor()
+               cursor.execute("""
+                  UPDATE barang
+                  SET harga = %s, stock = %s, spek = %s
+                  WHERE id_barang = %s;
+               """, (new_price, new_stock, new_spek, laptop_id))
+               connection.commit()
+               connection.close()
+               print(Fore.GREEN + f"Laptop with ID '{laptop_id}' updated successfully.")
+      except Exception as e:
+         print(Fore.RED + f"An error occurred: {str(e)}")
+
+   def del_laptop(self, laptop_id):
+      try:
+         connection = self.connect_to_database()
+         if connection:
+               cursor = connection.cursor()
+               cursor.execute("""
+                  DELETE FROM barang
+                  WHERE id_barang = %s;
+               """, (laptop_id,))
+               connection.commit()
+               connection.close()
+               print(Fore.GREEN + f"Laptop with ID '{laptop_id}' deleted successfully.")
+      except Exception as e:
+         print(Fore.RED + f"An error occurred: {str(e)}")
+
+
    def display_pembelian_history(shop):
       try:
          return shop.order_queue

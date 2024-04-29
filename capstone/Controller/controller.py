@@ -1,13 +1,13 @@
 from colorama import Fore, Style
 from Model.model import Admin, Customer
 from VIew.view import display_menu_and_stock, display_pembelian_history, display_penyewaan_history
-import getpass
+import pwinput
 
-def customer_actions(shop):
+def customer_actions(shop): 
     while True:
         try:
             customer_username = input("Enter your username: ")
-            customer_password = getpass.getpass("Enter your password: ")
+            customer_password = pwinput.pwinput(prompt="Enter your password: ")
             customer = Customer(customer_username, customer_password, shop)
             while True:
                 print_menu_customer()
@@ -43,6 +43,8 @@ def customer_actions(shop):
                         return
                     else:
                         print(Fore.RED + "Invalid choice. Please try again.")
+                except KeyboardInterrupt:
+                    print(Fore.RED + "Program interrupted by the user.")
                 except Exception as e:
                     print(Fore.RED + f"An error occurred: {str(e)}")
         except KeyboardInterrupt:
@@ -55,56 +57,61 @@ def admin_actions(shop):
     while True:
         try:
             admin_username = input(Fore.GREEN + "Enter your username: ")
-            admin_password = getpass.getpass("Enter your password: ")
+            admin_password = pwinput.pwinput(prompt="Enter your password: ")
             admin = Admin(admin_username, admin_password, shop)
             while True:
                 print_menu_admin()
                 admin_choice = input("Enter your choice: ")
-                if admin_choice == '1':
-                    display_menu_and_stock(shop.display_menu_and_stock())
-                elif admin_choice == '2':
-                    laptop_name = input("Enter new laptop name: ")
-                    price = int(input("Enter price: "))
-                    stock = int(input("Enter stock: "))
-                    location = input("Enter location (beginning, middle, or end): ")
-                    try:
-                        shop.add_new_laptop(laptop_name, price, stock, location)
-                    except ValueError as e:
-                        print(Fore.RED + str(e))
-                elif admin_choice == '3':
-                    try:
+                try:
+                    if admin_choice == '1':
                         display_menu_and_stock(shop.display_menu_and_stock())
-                        laptop_name = input("Enter the name of the laptop to update: ")
-                        new_price = int(input("Enter the new price: "))
-                        new_stock = int(input("Enter the new stock: "))
+                    elif admin_choice == '2':
+                        laptop_name = input("Enter new laptop name: ")
+                        price = int(input("Enter price: "))
+                        stock = int(input("Enter stock: "))
+                        location = input("Enter location (beginning, middle, or end): ")
                         try:
-                            shop.update_laptop(laptop_name, new_price, new_stock)
+                            shop.add_new_laptop(laptop_name, price, stock, location)
                         except ValueError as e:
                             print(Fore.RED + str(e))
-                    except ValueError as e:
-                        print(Fore.RED + str(e))
-                elif admin_choice == '4':
-                    display_menu_and_stock(shop.display_menu_and_stock())
-                    location = input("Enter the laptop name to delete: ")
-                    try:
-                        shop.del_laptop(location)
-                    except ValueError as e:
-                        print(Fore.RED + str(e))
-                elif admin_choice == '5':
-                    print("1. Display Pembelian History")
-                    print("2. Display Penyewaan History")
-                    history_choice = input("Enter your choice: ")
-                    if history_choice == '1':
-                        display_pembelian_history(shop)
-                    elif history_choice == '2':
-                        display_penyewaan_history(shop)
+                    elif admin_choice == '3':
+                        try:
+                            display_menu_and_stock(shop.display_menu_and_stock())
+                            laptop_name = input("Enter the name of the laptop to update: ")
+                            new_price = int(input("Enter the new price: "))
+                            new_stock = int(input("Enter the new stock: "))
+                            try:
+                                shop.update_laptop(laptop_name, new_price, new_stock)
+                            except ValueError as e:
+                                print(Fore.RED + str(e))
+                        except ValueError as e:
+                            print(Fore.RED + str(e))
+                    elif admin_choice == '4':
+                        display_menu_and_stock(shop.display_menu_and_stock())
+                        location = input("Enter the laptop name to delete: ")
+                        try:
+                            shop.del_laptop(location)
+                        except ValueError as e:
+                            print(Fore.RED + str(e))
+                    elif admin_choice == '5':
+                        print("1. Display Pembelian History")
+                        print("2. Display Penyewaan History")
+                        history_choice = input("Enter your choice: ")
+                        if history_choice == '1':
+                            display_pembelian_history(shop)
+                        elif history_choice == '2':
+                            display_penyewaan_history(shop)
+                        else:
+                            print(Fore.RED + "Invalid choice. Please try again.")
+
+                    elif admin_choice == '0':
+                        return
                     else:
                         print(Fore.RED + "Invalid choice. Please try again.")
-
-                elif admin_choice == '0':
-                    return
-                else:
-                    print(Fore.RED + "Invalid choice. Please try again.")
+                except KeyboardInterrupt:
+                        print(Fore.RED + "Program interrupted by the user.")
+                except Exception as e:
+                    print(Fore.RED + f"An error occurred: {str(e)}")
         except KeyboardInterrupt:
             print(Fore.RED + "Program interrupted by the user.")
         except Exception as e:
