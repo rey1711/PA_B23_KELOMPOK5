@@ -184,7 +184,7 @@ class LaptopShop:
          connection = self.connect_to_database()
          if connection:
                cursor = connection.cursor(dictionary=True)
-               cursor.execute("SELECT id_barang, nama_barang, harga, stock FROM barang;")
+               cursor.execute("SELECT id_barang, nama_barang, harga, stock, spek FROM barang;")
                barang = cursor.fetchall()
                connection.close()
                for laptop in barang:
@@ -197,6 +197,7 @@ class LaptopShop:
       except Exception as e:
          print(Fore.RED + f"An error occurred: {str(e)}")
          return []
+
       
    def fetch_admins_from_database(self):
       try:
@@ -335,15 +336,17 @@ class LaptopShop:
 
    def display_menu_and_stock(self, order_type="pembelian"):
       try:
-         if order_type == "pembelian":
-               return self.barang
-         elif order_type == "penyewaan":
-               rented_menu = []
-               for laptop in self.barang:
-                  laptop_copy = laptop.copy()  
-                  laptop_copy['harga']   
-                  rented_menu.append(laptop_copy)
-               return rented_menu
+         if order_type == "pembelian" or order_type == "penyewaan":
+               connection = self.connect_to_database()
+               if connection:
+                  cursor = connection.cursor(dictionary=True)
+                  if order_type == "pembelian":
+                     cursor.execute("SELECT id_barang, nama_barang, harga, stock, spek FROM barang;")
+                  elif order_type == "penyewaan":
+                     cursor.execute("SELECT id_barang, nama_barang, harga, stock, spek FROM barang;")
+                  menu = cursor.fetchall()
+                  connection.close()
+                  return menu
          else:
                raise ValueError("Invalid order type. Please choose 'pembelian' or 'penyewaan'.")
       except Exception as e:
