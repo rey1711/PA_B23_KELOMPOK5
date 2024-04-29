@@ -1,12 +1,13 @@
 from colorama import Fore, Style
 from Model.model import Admin, Customer
 from VIew.view import display_menu_and_stock, display_pembelian_history, display_penyewaan_history
+import getpass
 
 def customer_actions(shop):
     while True:
         try:
             customer_username = input("Enter your username: ")
-            customer_password = input("Enter your password: ")
+            customer_password = getpass.getpass("Enter your password: ")
             customer = Customer(customer_username, customer_password, shop)
             while True:
                 print_menu_customer()
@@ -54,7 +55,7 @@ def admin_actions(shop):
     while True:
         try:
             admin_username = input(Fore.GREEN + "Enter your username: ")
-            admin_password = input("Enter your password: ")
+            admin_password = getpass.getpass("Enter your password: ")
             admin = Admin(admin_username, admin_password, shop)
             while True:
                 print_menu_admin()
