@@ -102,7 +102,7 @@ def admin_actions(shop):
                         print(Fore.RED + "Invalid choice. Please try again.")
 
                 elif admin_choice == '0':
-                    break
+                    return
                 else:
                     print(Fore.RED + "Invalid choice. Please try again.")
         except KeyboardInterrupt:
