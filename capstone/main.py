@@ -68,17 +68,21 @@ def register_menu(shop):
     password = input("Enter your password: ")
 
     if role == 'Admin':
+        jobdesk = input("Enter your jobdesk: ")
         try:
-            shop.add_new_admin(username, password)
+            shop.add_new_admin(username, password, jobdesk)
         except ValueError as e:
             print(Fore.RED + str(e))
     elif role == 'Customer':
+        email = input("Enter your email: ")
+        nohp = input("Enter your phone number: ")
         try:
-            shop.add_new_customer(username, password)
+            shop.add_new_customer(username, password, email, nohp)
         except ValueError as e:
             print(Fore.RED + str(e))
     else:
         print(Fore.RED + "Invalid role. Please choose 'Admin' or 'Customer'.")
+
 
 if __name__ == "__main__":
     main()

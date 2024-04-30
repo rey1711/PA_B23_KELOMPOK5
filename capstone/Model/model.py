@@ -4,7 +4,7 @@ import mysql.connector
 from mysql.connector import Error
 
 class SingletonLogger:
-   _instance = None
+   _instance = None  
    _connection = None
 
    def __new__(cls):
@@ -84,68 +84,67 @@ class Customer(User):
       else:
          raise ValueError("Invalid username or password.")
 
+
    def place_order(self, order_type, id_barang, quantity, days=1):
-      try:
-         found = False
-         id_barang = int(id_barang)
-         for laptop in self.shop.barang:
-               if laptop.get('id_barang') == id_barang:
-                  stock = int(laptop['stock'])
-                  harga = int(laptop['harga']) 
-                  nama_barang = laptop['nama_barang']
-                  total_harga = harga * quantity 
-                  if stock >= quantity:
-                     order = (id_barang, quantity, order_type, days, total_harga) 
-                     self.shop.order_queue.append(order)
-                     try:
-                           connection = self.shop.connect_to_database()
-                           if connection:
-                              cursor = connection.cursor(dictionary=True)
-                              if order_type == "pembelian":
-                                 cursor.execute("""
-                                       INSERT INTO transaksi (id_transaksi, id_barang, total_barang)
-                                       VALUES (DEFAULT, %s, %s)
-                                 """, (id_barang, quantity)) 
-                                 cursor.execute("""
-                                       INSERT INTO pembelian (id_pembelian, id_transaksi, tanggal_pembelian, total_harga)
-                                       VALUES (DEFAULT, LAST_INSERT_ID(), CURRENT_DATE(), %s)
-                                 """, (total_harga,))
-                              elif order_type == "penyewaan":
-                                 jaminan = input("Masukkan jaminan: ")
-                                 cursor.execute("""
-                                       INSERT INTO transaksi (id_transaksi, id_barang, total_barang)
-                                       VALUES (DEFAULT, %s, %s)
-                                 """, (id_barang, quantity)) 
-                                 from datetime import datetime, timedelta
-                                 today = datetime.now()
-                                 return_date = today + timedelta(days=days)
-                                 cursor.execute("""
-                                       INSERT INTO penyewaan (id_penyewaan, id_transaksi, tanggal_minjam, jaminan, tanggal_kembali, total_harga)
-                                       VALUES (DEFAULT, LAST_INSERT_ID(), CURRENT_DATE(), %s, %s, %s)
-                                 """, (jaminan, return_date.strftime('%Y-%m-%d'), total_harga))
-                              connection.commit()
-                              connection.close()
-                     except Exception as e:
-                           print(Fore.RED + f"Failed to insert transaction data: {str(e)}")
-                     if order_type == "pembelian":  
-                           laptop['stock'] = str(stock - quantity)
-                           print(Fore.GREEN + f"Order placed by {self.username}: {quantity} {nama_barang.capitalize()}(s)")
-                     elif order_type == "penyewaan":  
-                           price_per_day = harga / 50  
-                           total_harga = price_per_day * days * quantity
-                           print(Fore.GREEN + f"Order placed by {self.username}: {quantity} {nama_barang.capitalize()}(s) for {days} days. Total price: ${total_harga}")
-                     found = True
-                     break
-                  else:
-                     raise ValueError(f"Insufficient stock for {nama_barang.capitalize()}")
-         if not found:
-               raise ValueError(f"Laptop with ID {id_barang} not found")
-      except ValueError as e:
-         print(Fore.RED + str(e))
-      except Exception as e:
-         print(Fore.RED + f"An error occurred: {str(e)}")
-
-
+         try:
+               found = False
+               id_barang = int(id_barang)
+               for laptop in self.shop.barang:  # Accessing shop's barang attribute
+                  if laptop.get('id_barang') == id_barang:
+                     stock = int(laptop['stock'])
+                     harga = int(laptop['harga'])
+                     nama_barang = laptop['nama_barang']
+                     total_harga = harga * quantity
+                     if stock >= quantity:
+                           order = (id_barang, quantity, order_type, days, total_harga)
+                           self.shop.order_queue.append(order)  # Accessing shop's order_queue attribute
+                           try:
+                              connection = self.shop.connect_to_database()  # Accessing shop's connect_to_database method
+                              if connection:
+                                 cursor = connection.cursor(dictionary=True)
+                                 if order_type == "pembelian":
+                                       cursor.execute("""
+                                          INSERT INTO transaksi (id_transaksi, id_barang, total_barang)
+                                          VALUES (DEFAULT, %s, %s)
+                                       """, (id_barang, quantity))
+                                       cursor.execute("""
+                                          INSERT INTO pembelian (id_pembelian, id_transaksi, tanggal_pembelian, total_harga)
+                                          VALUES (DEFAULT, LAST_INSERT_ID(), CURRENT_DATE(), %s)
+                                       """, (total_harga,))
+                                 elif order_type == "penyewaan":
+                                       jaminan = input("Masukkan jaminan: ")
+                                       cursor.execute("""
+                                          INSERT INTO transaksi (id_transaksi, id_barang, total_barang)
+                                          VALUES (DEFAULT, %s, %s)
+                                       """, (id_barang, quantity))
+                                       from datetime import datetime, timedelta
+                                       today = datetime.now()
+                                       return_date = today + timedelta(days=days)
+                                       cursor.execute("""
+                                          INSERT INTO penyewaan (id_penyewaan, id_transaksi, tanggal_minjam, jaminan, tanggal_kembali, total_harga)
+                                          VALUES (DEFAULT, LAST_INSERT_ID(), CURRENT_DATE(), %s, %s, %s)
+                                       """, (jaminan, return_date.strftime('%Y-%m-%d'), total_harga))
+                                 connection.commit()
+                                 connection.close()
+                           except Exception as e:
+                              print(Fore.RED + f"Failed to insert transaction data: {str(e)}")
+                           if order_type == "pembelian":
+                              laptop['stock'] = str(stock - quantity)
+                              print(Fore.GREEN + f"Order placed by {self.username}: {quantity} {nama_barang.capitalize()}(s)")
+                           elif order_type == "penyewaan":
+                              price_per_day = harga / 50
+                              total_harga = price_per_day * days * quantity
+                              print(Fore.GREEN + f"Order placed by {self.username}: {quantity} {nama_barang.capitalize()}(s) for {days} days. Total price: ${total_harga}")
+                           found = True
+                           break
+                     else:
+                           raise ValueError(f"Insufficient stock for {nama_barang.capitalize()}")
+               if not found:
+                  raise ValueError(f"Laptop with ID {id_barang} not found")
+         except ValueError as e:
+               print(Fore.RED + str(e))
+         except Exception as e:
+               print(Fore.RED + f"An error occurred: {str(e)}")
 
 class LaptopShop:
    def __init__(self):
@@ -233,20 +232,38 @@ class LaptopShop:
 
    def authenticate_admin(self, username, password):
       try:
-         for admin in self.admins:
-            if admin.get('nama_admin') == username and admin.get('password') == password:
+         connection = self.connect_to_database()
+         if connection:
+            cursor = connection.cursor(dictionary=True)
+            cursor.execute("SELECT * FROM admin WHERE nama_admin = %s AND password = %s", (username, password))
+            admin = cursor.fetchone()
+            connection.close()
+            if admin:
                return True
-         return False
+            else:
+               return False
+         else:
+            print("Failed to connect to database")
+            return False
       except Exception as e:
          print(Fore.RED + f"An error occurred: {str(e)}")
          return False
-      
+
    def authenticate_user(self, username, password):
       try:
-         for user in self.users:
-            if user.get('nama_pelanggan') == username and user.get('password') == password:
+         connection = self.connect_to_database()
+         if connection:
+            cursor = connection.cursor(dictionary=True)
+            cursor.execute("SELECT * FROM pelanggan WHERE nama_pelanggan = %s AND password = %s", (username, password))
+            user = cursor.fetchone()
+            connection.close()
+            if user:
                return True
-         return False
+            else:
+               return False
+         else:
+            print("Failed to connect to database")
+            return False
       except Exception as e:
          print(Fore.RED + f"An error occurred: {str(e)}")
          return False
@@ -284,6 +301,7 @@ class LaptopShop:
 
                connection.commit()
                connection.close()
+               self.update_menu_and_stock()
                print(Fore.GREEN + f"Laptop '{laptop_name}' added successfully.")
       except Exception as e:
          print(Fore.RED + f"An error occurred: {str(e)}")
@@ -300,6 +318,7 @@ class LaptopShop:
                """, (new_price, new_stock, new_spek, laptop_id))
                connection.commit()
                connection.close()
+               self.update_menu_and_stock()
                print(Fore.GREEN + f"Laptop with ID '{laptop_id}' updated successfully.")
       except Exception as e:
          print(Fore.RED + f"An error occurred: {str(e)}")
@@ -315,6 +334,7 @@ class LaptopShop:
                """, (laptop_id,))
                connection.commit()
                connection.close()
+               self.update_menu_and_stock()
                print(Fore.GREEN + f"Laptop with ID '{laptop_id}' deleted successfully.")
       except Exception as e:
          print(Fore.RED + f"An error occurred: {str(e)}")
@@ -334,24 +354,41 @@ class LaptopShop:
          print(Fore.RED + f"An error occurred: {str(e)}")
          return []
 
-   def display_menu_and_stock(self, order_type="pembelian"):
+   def display_menu_and_stock(self, order_type="pembelian", sorting_order=None):
       try:
          if order_type == "pembelian" or order_type == "penyewaan":
                connection = self.connect_to_database()
                if connection:
                   cursor = connection.cursor(dictionary=True)
-                  if order_type == "pembelian":
-                     cursor.execute("SELECT id_barang, nama_barang, harga, stock, spek FROM barang;")
-                  elif order_type == "penyewaan":
-                     cursor.execute("SELECT id_barang, nama_barang, harga, stock, spek FROM barang;")
+                  cursor.execute("SELECT id_barang, nama_barang, harga, stock, spek FROM barang;")
                   menu = cursor.fetchall()
                   connection.close()
-                  return menu
+                  if sorting_order:
+                     self.sort_menu(sorting_order)
+                  if order_type == "pembelian":
+                     return self.barang
+                  elif order_type == "penyewaan":
+                     rented_menu = []
+                     for laptop in self.barang:
+                           laptop_copy = laptop.copy()
+                           rented_menu.append(laptop_copy)
+                     return rented_menu
          else:
                raise ValueError("Invalid order type. Please choose 'pembelian' or 'penyewaan'.")
       except Exception as e:
          print(Fore.RED + f"An error occurred: {str(e)}")
          return []
+
+   def sort_menu(self, sorting_order='asc'):
+      try:
+         if sorting_order.lower() == 'asc':
+               self.barang = sorted(self.barang, key=lambda x: x['harga'])
+         elif sorting_order.lower() == 'desc':
+               self.barang = sorted(self.barang, key=lambda x: x['harga'], reverse=True)
+         else:
+               raise ValueError("Invalid sorting order. Please choose 'asc' for ascending or 'desc' for descending.")
+      except Exception as e:
+         print(Fore.RED + f"An error occurred: {str(e)}")
 
    def update_menu_and_stock(self):
       try:
@@ -382,41 +419,51 @@ class LaptopShop:
          print(Fore.RED + f"An error occurred: {str(e)}")
          return []
 
-   def add_new_admin(self, username, password):
+
+   def update_menu_and_stock(self):
       try:
-         if not username.isalpha():
+         self.barang = self.fetch_laptops_from_database()
+      except Exception as e:
+         print(Fore.RED + f"An error occurred: {str(e)}")
+   
+   def add_new_admin(self, username, password, jobdesk):
+      try:
+            if not username.isalpha():
                raise ValueError("Username should only contain letters.")
-         
-         # Lakukan pengecekan apakah admin dengan username tersebut sudah ada
-         for admin in self.admins:
-               if admin.get('nama_admin') == username:
+
+            # Lakukan pengecekan apakah admin dengan username tersebut sudah ada di database
+            connection = self.connect_to_database()
+            if connection:
+               cursor = connection.cursor()
+               cursor.execute("SELECT * FROM admin WHERE nama_admin = %s", (username,))
+               existing_admin = cursor.fetchone()
+               if existing_admin:
                   raise ValueError("Admin with this username already exists.")
-         
-         # Jika tidak ada admin dengan username yang sama, tambahkan admin baru
-         self.admins.append({'nama_admin': username, 'password': password})
-         print(Fore.GREEN + "Admin registered successfully!")
+               else:
+                  cursor.execute("INSERT INTO admin (nama_admin, password, jobdesk) VALUES (%s, %s, %s)", (username, password, jobdesk))
+                  connection.commit()
+                  connection.close()
+                  print(Fore.GREEN + "Admin registered successfully!")
       except Exception as e:
-         print(Fore.RED + f"An error occurred: {str(e)}")
+            print(Fore.RED + f"An error occurred: {str(e)}")
 
-   def add_new_customer(self, username, password):
+   def add_new_customer(self, username, password, email, nohp):
       try:
-         if not username.isalpha():
+            if not username.isalpha():
                raise ValueError("Username should only contain letters.")
-         for user in self.users:
-               if user.get('nama_pelanggan') == username:
-                  raise ValueError("Customer with this username already exists.")
-         self.users.append({'nama_pelanggan': username, 'password': password})
-         print(Fore.GREEN + "Customer registered successfully!")
-      except Exception as e:
-         print(Fore.RED + f"An error occurred: {str(e)}")
 
-   def sort_menu(self, order_type='ascending'):
-      try:
-         if order_type == '1':
-               self.barang = sorted(self.barang, key=lambda x: x['harga'])
-         elif order_type == '2':
-               self.barang = sorted(self.barang, key=lambda x: x['harga'], reverse=True)
-         else:
-               raise ValueError("Invalid order type. Please choose 'ascending' or 'descending'.")
+            # Lakukan pengecekan apakah customer dengan username tersebut sudah ada di database
+            connection = self.connect_to_database()
+            if connection:
+               cursor = connection.cursor()
+               cursor.execute("SELECT * FROM pelanggan WHERE nama_pelanggan = %s", (username,))
+               existing_customer = cursor.fetchone()
+               if existing_customer:
+                  raise ValueError("Customer with this username already exists.")
+               else:
+                  cursor.execute("INSERT INTO pelanggan (nama_pelanggan, password, email, nohp) VALUES (%s, %s, %s, %s)", (username, password, email, nohp))
+                  connection.commit()
+                  connection.close()
+                  print(Fore.GREEN + "Customer registered successfully!")
       except Exception as e:
-         print(Fore.RED + f"An error occurred: {str(e)}")
+            print(Fore.RED + f"An error occurred: {str(e)}")

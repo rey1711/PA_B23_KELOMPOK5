@@ -17,10 +17,15 @@ def customer_actions(shop):
                         display_menu_and_stock(shop.display_menu_and_stock())
                     elif customer_choice == '2':
                         try:
-                            display_menu_and_stock(shop.display_menu_and_stock())
-                            order_type = input("Enter order type (ascending or descending): ")
-                            shop.sort_menu(order_type=order_type)  
-                            display_menu_and_stock(shop.display_menu_and_stock())
+                            menu = shop.display_menu_and_stock()
+                            display_menu_and_stock(menu)
+                            sorting_order = input("Enter sorting order: 'asc' for ascending or 'desc' for descending: ")
+                            if sorting_order.lower() == 'asc' or sorting_order.lower() == 'desc':
+                                shop.sort_menu(sorting_order)
+                                menu = shop.display_menu_and_stock()  # Perbarui menu setelah pengurutan
+                                display_menu_and_stock(menu)
+                            else:
+                                raise ValueError("Invalid sorting order. Please enter 'asc' for ascending or 'desc' for descending.")
                         except ValueError as e:
                             print(Fore.RED + str(e))
                     elif customer_choice == '3':
@@ -69,28 +74,29 @@ def admin_actions(shop):
                         laptop_name = input("Enter new laptop name: ")
                         price = int(input("Enter price: "))
                         stock = int(input("Enter stock: "))
-                        location = input("Enter location (beginning, middle, or end): ")
+                        spek = input("Enter laptop spec : ")
                         try:
-                            shop.add_new_laptop(laptop_name, price, stock, location)
+                            shop.add_new_laptop(laptop_name, price, stock, spek)
                         except ValueError as e:
                             print(Fore.RED + str(e))
                     elif admin_choice == '3':
                         try:
                             display_menu_and_stock(shop.display_menu_and_stock())
-                            laptop_name = input("Enter the name of the laptop to update: ")
+                            laptop_name = input("Enter the ID of the laptop to update: ")
                             new_price = int(input("Enter the new price: "))
                             new_stock = int(input("Enter the new stock: "))
+                            new_spek = (input("Enter the new spec: "))
                             try:
-                                shop.update_laptop(laptop_name, new_price, new_stock)
+                                shop.update_laptop(laptop_name, new_price, new_stock, new_spek)
                             except ValueError as e:
                                 print(Fore.RED + str(e))
                         except ValueError as e:
                             print(Fore.RED + str(e))
                     elif admin_choice == '4':
                         display_menu_and_stock(shop.display_menu_and_stock())
-                        location = input("Enter the laptop name to delete: ")
+                        deleteLaptop = input("Enter the laptop ID to delete: ")
                         try:
-                            shop.del_laptop(location)
+                            shop.del_laptop(deleteLaptop)
                         except ValueError as e:
                             print(Fore.RED + str(e))
                     elif admin_choice == '5':
