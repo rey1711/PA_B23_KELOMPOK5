@@ -243,11 +243,109 @@ def print_menu_admin():
 ```
 fungsi di atas untuk  menampilkan opsi yang tersedia untuk customer dan pelanggan
 
-
+ 
 View
 
+```
+from collections import deque
+from colorama import Fore
+import mysql.connector
+from mysql.connector import Error
+```
+
+Import deque : Untuk mendapatkan akses data untuk deque seperti sebuah daftar atau lebih fleksibel agar bisa menambahkan atau menghapus elemen dengan lebih mudah.
+Import fore  : memberikan warna pada terminal
+Import mysql connector :   buat menghubungkan program ke database
+Mysql connector import error : Untuk menampilkan masalah yang ada ketika ada masalah muncul saat menghubungkat program dengan database
 
 
+```
+class SingletonLogger:
+   _instance = None  
+   _connection = None
+```
+Untuk memastikan hanya satu logger yang masuk ke program
+
+
+```
+   def __new__(cls):
+      if cls._instance is None:
+         cls._instance = super().__new__(cls)
+         cls._instance.connect_to_database()
+      return cls._instance
+```
+Untuk Menghubungkan program jika ada database baru yang ingin di hubungkan dengan program
+
+
+
+```
+   def connect_to_database(self):
+      try:
+         hostname = "462.h.filess.io"
+         database = "reytop3_perfectly"
+         port = "3306"
+         username = "reytop3_perfectly"
+         password = "73bac833e2e1437cc2e127b57d2a70b7b4f11308"
+
+         self._connection = mysql.connector.connect(
+               host=hostname,
+               database=database,
+               user=username,
+               password=password,
+               port=port
+         )
+         if self._connection.is_connected():
+               print("Welcome to ReyTop ✨")
+      except Error as e:
+         print("Error while connecting to MySQL", e)
+```
+
+Untuk menampilkan detail koneksinya dan membuat koneksinya
+
+
+
+```
+def log(self, message):
+      print(message)
+
+   def close_connection(self):
+      if self._connection:
+         self._connection.close()
+         print("Please wait, Going to Connecting Database")
+
+logger1 = SingletonLogger()
+logger2 = SingletonLogger()
+
+if logger1 is logger2:
+   print("Instance Checking, Success")
+
+logger1.close_connection()
+
+class User:
+   def __init__(self, username, password):
+      self.username = username
+      self.password = password
+
+class Admin(User):
+   def __init__(self, username, password, shop):
+      if shop.authenticate_admin(username, password)
+         super().__init__(username, password)
+         self.shop = shop  
+      else:
+         raise ValueError("Invalid username or password."):
+
+class Customer(User):
+   def __init__(self, username, password, shop):
+      if shop.authenticate_user(username, password):
+         super().__init__(username, password)
+         self.shop = shop
+      else:
+         raise ValueError("Invalid username or password.")
+```
+Log : Untuk untuk mencetak pesan log ke konsol
+close_connection : untuk menutup koneksi ke database
+class user,admin dan customer : untuk mendefenisikan tiga kelas yaitu user,admin,dan customer
+  
 
 apa saja fitur yang ada di program
 *Cara Penggunaan*
