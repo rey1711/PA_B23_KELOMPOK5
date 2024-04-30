@@ -36,6 +36,10 @@ Program ini memberikan pengalaman pengguna yang ramah dan efisien baik untuk pel
 
 ![Screenshot 2024-04-30 130601](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/43418805-2ebc-49b9-81d1-ef44ffef2ceb)
 
+Struktur MVC
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/143304299/e930ae47-1de6-4b87-b337-af123449a9bd)
+
+
   MVC (Model-View-Controller) adalah  pola desain arsitektur perangkat lunak yang membagi aplikasi menjadi tiga komponen utama: model , view, dan controller. Setiap komponen memiliki tanggung jawabnya sendiri untuk memproses informasi dan mengelola interaksi antara pengguna dan aplikasi. Mari kita jelaskan secara singkat setiap bagian dari MVC.
 MVC 
 
