@@ -19,8 +19,22 @@ Admin:
 Program ini memberikan pengalaman pengguna yang ramah dan efisien baik untuk pelanggan maupun admin, dengan antarmuka yang mudah digunakan dan fungsi yang lengkap untuk memenuhi kebutuhan perusahaan            Reytop dalam mengelola bisnis pembelian dan penyewaan laptop mereka.
 
 *Struktur Project*
-  flowchart
+
+
   
+![Screenshot 2024-04-30 124346](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/26bf2b07-24be-437c-9856-dce17296dea3)
+
+  
+![Screenshot 2024-04-30 130515](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/a0bb19dc-76f5-4dfe-b864-b2ad68eaf414)
+
+ 
+![Screenshot 2024-04-30 130533](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/a62e3d5f-9d3c-4ccc-81cf-c2c895c255cf)
+
+
+![Screenshot 2024-04-30 130547](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/fb333b97-2881-43d4-b723-8011c2faa5e6)
+
+
+![Screenshot 2024-04-30 130601](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/43418805-2ebc-49b9-81d1-ef44ffef2ceb)
 
   MVC (Model-View-Controller) adalah  pola desain arsitektur perangkat lunak yang membagi aplikasi menjadi tiga komponen utama: model , view, dan controller. Setiap komponen memiliki tanggung jawabnya sendiri untuk memproses informasi dan mengelola interaksi antara pengguna dan aplikasi. Mari kita jelaskan secara singkat setiap bagian dari MVC.
 MVC 
