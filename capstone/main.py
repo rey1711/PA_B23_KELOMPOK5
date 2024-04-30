@@ -27,7 +27,10 @@ def main():
                 break
             else:
                 print(Fore.RED + "Invalid choice. Please choose again.")
-
+    except ValueError as e:
+        print(Fore.RED + f"Invalid Input data.")
+    except Exception as e:
+        print(Fore.RED + f"Invalid Input data.")
     except KeyboardInterrupt:
         print(Fore.RED + "Program interrupted by the user.")
         main()
@@ -51,12 +54,20 @@ def login_menu(shop):
         try:
             admin_actions(shop)
         except ValueError as e:
-            print(Fore.RED + str(e))
+            print(Fore.RED + f"Invalid Input data.")
+        except KeyboardInterrupt:
+            print(Fore.RED + "Program interrupted by the user.")
+        except Exception as e:
+            print(Fore.RED + f"Invalid Input data.")
     elif role == 'Customer':
         try:
             customer_actions(shop)
         except ValueError as e:
-            print(Fore.RED + str(e))
+            print(Fore.RED + f"Invalid Input data.")
+        except KeyboardInterrupt:
+            print(Fore.RED + "Program interrupted by the user.")
+        except Exception as e:
+            print(Fore.RED + f"Invalid Input data.")
     else:
         print(Fore.RED + "Invalid role. Please choose 'Admin' or 'Customer'.")
 
@@ -71,14 +82,18 @@ def register_menu(shop):
         try:
             shop.add_new_admin(username, password, jobdesk)
         except ValueError as e:
-            print(Fore.RED + str(e))
+            print(Fore.RED + f"Invalid Input data.")
     elif role == 'Customer':
         email = input("Enter your email: ")
         nohp = input("Enter your phone number: ")
         try:
             shop.add_new_customer(username, password, email, nohp)
         except ValueError as e:
-            print(Fore.RED + str(e))
+            print(Fore.RED + f"Invalid Input data.")
+        except KeyboardInterrupt:
+            print(Fore.RED + "Program interrupted by the user.")
+        except Exception as e:
+            print(Fore.RED + f"Invalid Input data.")
     else:
         print(Fore.RED + "Invalid role. Please choose 'Admin' or 'Customer'.")
 
