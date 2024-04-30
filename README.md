@@ -74,13 +74,14 @@ MVC
 
 
 
-'''  
+``` 
 from Model.model import  LaptopShop, SingletonLogger
 from Controller.controller import customer_actions, admin_actions
 from prettytable import PrettyTable 
 from colorama import Fore, Style
 Fitur dan Fungsionalitas
-'''
+```
+
 
 diatas adalah dictionary
 model    : berisi definisi kelas untuk model bisnis, seperti LaptopShop yang mungkin mengatur logika terkait penjualan laptop, dan SingletonLogger yang mungkin bertanggung jawab atas logging dalam aplikasi.
