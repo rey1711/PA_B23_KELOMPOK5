@@ -36,6 +36,8 @@ Program ini memberikan pengalaman pengguna yang ramah dan efisien baik untuk pel
 
 ![Screenshot 2024-04-30 130601](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/43418805-2ebc-49b9-81d1-ef44ffef2ceb)
 
+
+
 Struktur MVC
 ![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/143304299/e930ae47-1de6-4b87-b337-af123449a9bd)
 
@@ -72,7 +74,17 @@ MVC
 
 
 
-*Fitur dan Fungsionalitas*
+'''  
+from Model.model import  LaptopShop, SingletonLogger
+from Controller.controller import customer_actions, admin_actions
+from prettytable import PrettyTable 
+from colorama import Fore, Style
+Fitur dan Fungsionalitas
+'''
+
+diatas adalah dictionary
+model    : berisi definisi kelas untuk model bisnis, seperti LaptopShop yang mungkin mengatur logika terkait penjualan laptop, dan SingletonLogger yang mungkin bertanggung jawab atas logging dalam aplikasi.
+Controller    : Berkemungkinan terdapat dua modul di sini, customer_actions dan admin_actions, yang berisi logika terkait dengan tindakan yang dapat dilakukan oleh pelanggan dan administrator sistem, seperti menambahkan produk, mengelola inventaris, memproses pembayaran, dll.
 
 
 
