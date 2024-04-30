@@ -1,6 +1,6 @@
-from colorama import Fore, Style
+from colorama import Fore
 from Model.model import Admin, Customer
-from VIew.view import display_menu_and_stock, display_pembelian_history, display_penyewaan_history
+from View.view import display_menu_and_stock, display_pembelian_history, display_penyewaan_history
 import pwinput
 
 def customer_actions(shop): 
@@ -22,12 +22,12 @@ def customer_actions(shop):
                             sorting_order = input("Enter sorting order: 'asc' for ascending or 'desc' for descending: ")
                             if sorting_order.lower() == 'asc' or sorting_order.lower() == 'desc':
                                 shop.sort_menu(sorting_order)
-                                menu = shop.display_menu_and_stock()  # Perbarui menu setelah pengurutan
+                                menu = shop.display_menu_and_stock()  
                                 display_menu_and_stock(menu)
                             else:
                                 raise ValueError("Invalid sorting order. Please enter 'asc' for ascending or 'desc' for descending.")
                         except ValueError as e:
-                            print(Fore.RED + str(e))
+                            print(Fore.RED + f"Invalid Input data.")
                     elif customer_choice == '3':
                         keyword = input("Enter the keyword to search: ")
                         display_menu_and_stock(shop.search_menu(keyword))
@@ -51,11 +51,11 @@ def customer_actions(shop):
                 except KeyboardInterrupt:
                     print(Fore.RED + "Program interrupted by the user.")
                 except Exception as e:
-                    print(Fore.RED + f"An error occurred: {str(e)}")
+                    print(Fore.RED + f"Invalid Input data.")
         except KeyboardInterrupt:
             print(Fore.RED + "Program interrupted by the user.")
         except Exception as e:
-            print(Fore.RED + f"An error occurred: {str(e)}")
+            print(Fore.RED + f"Invalid Input data.")
 
 
 def admin_actions(shop):
@@ -78,7 +78,7 @@ def admin_actions(shop):
                         try:
                             shop.add_new_laptop(laptop_name, price, stock, spek)
                         except ValueError as e:
-                            print(Fore.RED + str(e))
+                            print(Fore.RED + f"Invalid Input data.")
                     elif admin_choice == '3':
                         try:
                             display_menu_and_stock(shop.display_menu_and_stock())
@@ -89,16 +89,16 @@ def admin_actions(shop):
                             try:
                                 shop.update_laptop(laptop_name, new_price, new_stock, new_spek)
                             except ValueError as e:
-                                print(Fore.RED + str(e))
+                                print(Fore.RED + f"Invalid Input data.")
                         except ValueError as e:
-                            print(Fore.RED + str(e))
+                            print(Fore.RED + f"Invalid Input data.")
                     elif admin_choice == '4':
                         display_menu_and_stock(shop.display_menu_and_stock())
                         deleteLaptop = input("Enter the laptop ID to delete: ")
                         try:
                             shop.del_laptop(deleteLaptop)
                         except ValueError as e:
-                            print(Fore.RED + str(e))
+                            print(Fore.RED + f"Invalid Input data.")
                     elif admin_choice == '5':
                         print("1. Display Pembelian History")
                         print("2. Display Penyewaan History")
@@ -117,11 +117,11 @@ def admin_actions(shop):
                 except KeyboardInterrupt:
                         print(Fore.RED + "Program interrupted by the user.")
                 except Exception as e:
-                    print(Fore.RED + f"An error occurred: {str(e)}")
+                    print(Fore.RED + f"Invalid Input data.")
         except KeyboardInterrupt:
             print(Fore.RED + "Program interrupted by the user.")
         except Exception as e:
-            print(Fore.RED + f"An error occurred: {str(e)}")
+            print(Fore.RED + f"Invalid Input data.")
 
 
 

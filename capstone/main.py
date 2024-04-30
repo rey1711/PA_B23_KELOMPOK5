@@ -1,5 +1,4 @@
-from Model.model import Admin, Customer, LaptopShop, SingletonLogger
-from VIew.view import display_menu_and_stock
+from Model.model import  LaptopShop, SingletonLogger
 from Controller.controller import customer_actions, admin_actions
 from prettytable import PrettyTable 
 from colorama import Fore, Style
@@ -9,7 +8,7 @@ def mainsingleton():
     SingletonLogger2 =SingletonLogger.get_instance()
     
     if SingletonLogger1 is SingletonLogger2:
-        print("instance sama, singleton berhasil")
+        print("Instance Checking for Singleton")
         
     SingletonLogger2.log("this is logged using a singleton logging system")
     

@@ -18,16 +18,16 @@ def display_menu_and_stock(menu, order_type="pembelian"):
         else:
             print(Fore.YELLOW + "No items found.")
     except Exception as e:
-        print(Fore.RED + f"An error occurred: {str(e)}")
+        print(Fore.RED + f"Invalid Input data.")
 
-def display_pembelian_history(self):
+def display_pembelian_history(shop):
     try:
-        connection = self.connect_to_database()
+        connection = shop.connect_to_database()
         if connection:
             cursor = connection.cursor(dictionary=True)
             cursor.execute("""
                 SELECT pembelian.id_pembelian, pembelian.tanggal_pembelian, pembelian.total_harga, 
-                SUM(transaksi.total_barang) AS total_barang, pelanggan.nama_pelanggan
+                SUM(transaksi.total_barang) AS total_barang
                 FROM pembelian
                 INNER JOIN transaksi ON pembelian.id_pembelian = transaksi.id_transaksi
                 GROUP BY pembelian.id_pembelian;
@@ -36,30 +36,29 @@ def display_pembelian_history(self):
             connection.close()
             if pembelian_history:
                 table = PrettyTable()
-                table.field_names = ["id_pembelian", "tanggal_pembelian", "total_harga", "total_barang", "nama_pelanggan"]
+                table.field_names = ["id_pembelian", "tanggal_pembelian", "total_harga", "total_barang"]
                 for order in pembelian_history:
                     id_pembelian = order["id_pembelian"]
                     tanggal_pembelian = order["tanggal_pembelian"]
                     total_harga = order["total_harga"]
                     total_barang = int(order["total_barang"])
-                    nama_pelanggan = order["nama_pelanggan"]
-                    table.add_row([id_pembelian, tanggal_pembelian, total_harga, total_barang, nama_pelanggan])
+                    table.add_row([id_pembelian, tanggal_pembelian, total_harga, total_barang])
                 print(table)
             else:
                 print(Fore.YELLOW + "No pembelian history found.")
         else:
             print(Fore.RED + "Failed to connect to database")
     except Exception as e:
-        print(Fore.RED + f"An error occurred: {str(e)}")
+        print(Fore.RED + f"Invalid Input data.")
 
-def display_penyewaan_history(self):
+def display_penyewaan_history(shop):
     try:
-        connection = self.connect_to_database()
+        connection = shop.connect_to_database()
         if connection:
             cursor = connection.cursor(dictionary=True)
             cursor.execute("""
                 SELECT penyewaan.id_penyewaan, penyewaan.tanggal_minjam, penyewaan.jaminan, penyewaan.tanggal_kembali, penyewaan.total_harga, 
-                transaksi.total_barang AS total_barang, pelanggan.nama_pelanggan
+                transaksi.total_barang AS total_barang
                 FROM penyewaan
                 INNER JOIN transaksi ON penyewaan.id_transaksi = transaksi.id_transaksi
             """)
@@ -67,7 +66,7 @@ def display_penyewaan_history(self):
             connection.close()
             if penyewaan_history:
                 table = PrettyTable()
-                table.field_names = ["id_penyewaan", "tanggal_minjam", "tanggal_kembali", "jaminan", "total_harga", "total_barang", "nama_pelanggan"]
+                table.field_names = ["id_penyewaan", "tanggal_minjam", "tanggal_kembali", "jaminan", "total_harga", "total_barang"]
                 for order in penyewaan_history:
                     id_penyewaan = order["id_penyewaan"]
                     tanggal_minjam = order["tanggal_minjam"]
@@ -75,16 +74,12 @@ def display_penyewaan_history(self):
                     tanggal_kembali = (order["tanggal_kembali"])
                     total_harga = order["total_harga"]
                     total_barang = int(order["total_barang"])
-                    nama_pelanggan = order["nama_pelanggan"]
-                    table.add_row([id_penyewaan, tanggal_minjam, tanggal_kembali, jaminan, total_harga, total_barang, nama_pelanggan])
+                    table.add_row([id_penyewaan, tanggal_minjam, tanggal_kembali, jaminan, total_harga, total_barang])  
                 print(table)
             else:
                 print(Fore.YELLOW + "No penyewaan history found.")
         else:
             print(Fore.RED + "Failed to connect to database")
     except Exception as e:
-        print(Fore.RED + f"An error occurred: {str(e)}")
-
-
-
+        print(Fore.RED + f"Invalid Input data.")
 

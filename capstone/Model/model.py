@@ -1,5 +1,5 @@
 from collections import deque
-from colorama import init, Fore
+from colorama import Fore
 import mysql.connector
 from mysql.connector import Error
 
@@ -29,8 +29,7 @@ class SingletonLogger:
                port=port
          )
          if self._connection.is_connected():
-               db_Info = self._connection.get_server_info()
-               print("Connected to MySQL Server version ", db_Info)
+               print("Welcome to ReyTop ✨")
       except Error as e:
          print("Error while connecting to MySQL", e)
 
@@ -40,15 +39,13 @@ class SingletonLogger:
    def close_connection(self):
       if self._connection:
          self._connection.close()
-         print("Connection to database closed.")
+         print("Please wait, Going to Connecting Database")
 
 logger1 = SingletonLogger()
 logger2 = SingletonLogger()
 
 if logger1 is logger2:
-   print("Instance sama, singleton berhasil")
-
-logger1.log("This is a log message")
+   print("Instance Checking, Success")
 
 logger1.close_connection()
 
@@ -65,17 +62,6 @@ class Admin(User):
       else:
          raise ValueError("Invalid username or password.")
 
-   def delete_order(self, customer_name):
-      try:
-         for order in self.shop.order_queue:  
-               if order[0] == customer_name:
-                  self.shop.order_queue.remove(order)
-                  print(Fore.GREEN + f"Order for {customer_name} deleted successfully.")
-                  return
-         print(Fore.RED + f"No order found for customer '{customer_name}'.")
-      except Exception as e:
-         print(Fore.RED + f"An error occurred: {str(e)}")
-
 class Customer(User):
    def __init__(self, username, password, shop):
       if shop.authenticate_user(username, password):
@@ -84,71 +70,69 @@ class Customer(User):
       else:
          raise ValueError("Invalid username or password.")
 
-
    def place_order(self, order_type, id_barang, quantity, days=1):
-         try:
-               found = False
-               id_barang = int(id_barang)
-               for laptop in self.shop.barang:  # Accessing shop's barang attribute
-                  if laptop.get('id_barang') == id_barang:
-                     stock = int(laptop['stock'])
-                     harga = int(laptop['harga'])
-                     nama_barang = laptop['nama_barang']
-                     total_harga = harga * quantity
-                     if stock >= quantity:
-                           order = (id_barang, quantity, order_type, days, total_harga)
-                           self.shop.order_queue.append(order)  # Accessing shop's order_queue attribute
-                           try:
-                              connection = self.shop.connect_to_database()  # Accessing shop's connect_to_database method
-                              if connection:
-                                 cursor = connection.cursor(dictionary=True)
-                                 if order_type == "pembelian":
-                                       cursor.execute("""
-                                          INSERT INTO transaksi (id_transaksi, id_barang, total_barang)
-                                          VALUES (DEFAULT, %s, %s)
-                                       """, (id_barang, quantity))
-                                       cursor.execute("""
-                                          INSERT INTO pembelian (id_pembelian, id_transaksi, tanggal_pembelian, total_harga)
-                                          VALUES (DEFAULT, LAST_INSERT_ID(), CURRENT_DATE(), %s)
-                                       """, (total_harga,))
-                                 elif order_type == "penyewaan":
-                                       jaminan = input("Masukkan jaminan: ")
-                                       cursor.execute("""
-                                          INSERT INTO transaksi (id_transaksi, id_barang, total_barang)
-                                          VALUES (DEFAULT, %s, %s)
-                                       """, (id_barang, quantity))
-                                       from datetime import datetime, timedelta
-                                       today = datetime.now()
-                                       return_date = today + timedelta(days=days)
-                                       cursor.execute("""
-                                          INSERT INTO penyewaan (id_penyewaan, id_transaksi, tanggal_minjam, jaminan, tanggal_kembali, total_harga)
-                                          VALUES (DEFAULT, LAST_INSERT_ID(), CURRENT_DATE(), %s, %s, %s)
-                                       """, (jaminan, return_date.strftime('%Y-%m-%d'), total_harga))
-                                 connection.commit()
-                                 connection.close()
-                           except Exception as e:
-                              print(Fore.RED + f"Failed to insert transaction data: {str(e)}")
-                           if order_type == "pembelian":
-                              laptop['stock'] = str(stock - quantity)
-                              print(Fore.GREEN + f"Order placed by {self.username}: {quantity} {nama_barang.capitalize()}(s)")
-                           elif order_type == "penyewaan":
-                              price_per_day = harga / 50
-                              total_harga = price_per_day * days * quantity
-                              print(Fore.GREEN + f"Order placed by {self.username}: {quantity} {nama_barang.capitalize()}(s) for {days} days. Total price: ${total_harga}")
-                           found = True
-                           break
-                     else:
-                           raise ValueError(f"Insufficient stock for {nama_barang.capitalize()}")
-               if not found:
-                  raise ValueError(f"Laptop with ID {id_barang} not found")
-         except ValueError as e:
-               print(Fore.RED + str(e))
-         except Exception as e:
-               print(Fore.RED + f"An error occurred: {str(e)}")
+      try:
+            found = False
+            id_barang = int(id_barang)
+            for laptop in self.shop.barang:  
+               if laptop.get('id_barang') == id_barang:
+                  stock = int(laptop['stock'])
+                  harga = int(laptop['harga'])
+                  nama_barang = laptop['nama_barang']
+                  total_harga = harga * quantity
+                  if stock >= quantity:
+                        order = (id_barang, quantity, order_type, days, total_harga)
+                        self.shop.order_queue.append(order)  
+                        try:
+                           connection = self.shop.connect_to_database()  
+                           if connection:
+                              cursor = connection.cursor(dictionary=True)
+                              if order_type == "pembelian":
+                                    cursor.execute("""
+                                       INSERT INTO transaksi (id_transaksi, id_barang, total_barang)
+                                       VALUES (DEFAULT, %s, %s)
+                                    """, (id_barang, quantity))
+                                    cursor.execute("""
+                                       INSERT INTO pembelian (id_pembelian, id_transaksi, tanggal_pembelian, total_harga)
+                                       VALUES (DEFAULT, LAST_INSERT_ID(), CURRENT_DATE(), %s)
+                                    """, (total_harga,))
+                              elif order_type == "penyewaan":
+                                    jaminan = input("Masukkan jaminan: ")
+                                    cursor.execute("""
+                                       INSERT INTO transaksi (id_transaksi, id_barang, total_barang)
+                                       VALUES (DEFAULT, %s, %s)
+                                    """, (id_barang, quantity))
+                                    from datetime import datetime, timedelta
+                                    today = datetime.now()
+                                    return_date = today + timedelta(days=days)
+                                    cursor.execute("""
+                                       INSERT INTO penyewaan (id_penyewaan, id_transaksi, tanggal_minjam, jaminan, tanggal_kembali, total_harga)
+                                       VALUES (DEFAULT, LAST_INSERT_ID(), CURRENT_DATE(), %s, %s, %s)
+                                    """, (jaminan, return_date.strftime('%Y-%m-%d'), total_harga))
+                              connection.commit()
+                              connection.close()
+                        except Exception as e:
+                           print(Fore.RED + f"Failed to insert transaction data.")
+                        if order_type == "pembelian":
+                           laptop['stock'] = str(stock - quantity)
+                           print(Fore.GREEN + f"Order placed by {self.username}: {quantity} {nama_barang.capitalize()}(s)")
+                        elif order_type == "penyewaan":
+                           price_per_day = harga / 50
+                           total_harga = price_per_day * days * quantity
+                           print(Fore.GREEN + f"Order placed by {self.username}: {quantity} {nama_barang.capitalize()}(s) for {days} days. Total price: ${total_harga}")
+                        found = True
+                        break
+                  else:
+                        raise ValueError(f"Insufficient stock for {nama_barang.capitalize()}")
+            if not found:
+               raise ValueError(f"Laptop with ID {id_barang} not found")
+      except ValueError as e:
+            print(Fore.RED + f"Invalid Input data.")
+      except Exception as e:
+            print(Fore.RED + f"Invalid Input data.")
 
 class LaptopShop:
    def __init__(self):
-      self.total_income = 0
       self.order_stack = deque()
       self.order_queue = deque()
       self.menu = []
@@ -156,7 +140,7 @@ class LaptopShop:
       self.barang = self.fetch_laptops_from_database()
       self.users = self.fetch_users_from_database()
       self.admins = self.fetch_admins_from_database()
-      
+
    def fetch_purchase_history_from_database(self):
       try:
          connection = self.connect_to_database()
@@ -175,7 +159,7 @@ class LaptopShop:
                print("Failed to connect to database")
                return []
       except Exception as e:
-         print(Fore.RED + f"An error occurred: {str(e)}")
+         print(Fore.RED + f"Invalid Input data.")
          return []
 
    def fetch_laptops_from_database(self):
@@ -194,10 +178,9 @@ class LaptopShop:
                print("Failed to connect to database")
                return []
       except Exception as e:
-         print(Fore.RED + f"An error occurred: {str(e)}")
+         print(Fore.RED + f"Invalid Input data.")
          return []
 
-      
    def fetch_admins_from_database(self):
       try:
          connection = self.connect_to_database()
@@ -211,7 +194,7 @@ class LaptopShop:
             print("Failed to connect to database")
             return []
       except Exception as e:
-         print(Fore.RED + f"An error occurred: {str(e)}")
+         print(Fore.RED + f"Invalid Input data.")
          return []
       
    def fetch_users_from_database(self):
@@ -227,7 +210,7 @@ class LaptopShop:
             print("Failed to connect to database")
             return []
       except Exception as e:
-         print(Fore.RED + f"An error occurred: {str(e)}")
+         print(Fore.RED + f"Invalid Input data.")
          return []
 
    def authenticate_admin(self, username, password):
@@ -246,7 +229,7 @@ class LaptopShop:
             print("Failed to connect to database")
             return False
       except Exception as e:
-         print(Fore.RED + f"An error occurred: {str(e)}")
+         print(Fore.RED + f"Invalid Input data.")
          return False
 
    def authenticate_user(self, username, password):
@@ -265,7 +248,7 @@ class LaptopShop:
             print("Failed to connect to database")
             return False
       except Exception as e:
-         print(Fore.RED + f"An error occurred: {str(e)}")
+         print(Fore.RED + f"Invalid Input data.")
          return False
 
    def connect_to_database(self):
@@ -278,17 +261,12 @@ class LaptopShop:
       try:
          connection = mysql.connector.connect(host=hostname, database=database, user=username, password=password, port=port)
          if connection.is_connected():
-               db_Info = connection.get_server_info()
-               print("Connected to MySQL Server version ", db_Info)
+               print("Connecting to Database, Thanks for the wait❤️")
                return connection
       except Error as e:
          print("Error while connecting to MySQL", e)
          return None
 
-
-   def calculate_total_income(self):
-      return self.total_income
-   
    def add_new_laptop(self, laptop_name, price, stock, spek):
       try:
          connection = self.connect_to_database()
@@ -304,7 +282,7 @@ class LaptopShop:
                self.update_menu_and_stock()
                print(Fore.GREEN + f"Laptop '{laptop_name}' added successfully.")
       except Exception as e:
-         print(Fore.RED + f"An error occurred: {str(e)}")
+         print(Fore.RED + f"Invalid Input data.")
 
    def update_laptop(self, laptop_id, new_price, new_stock, new_spek):
       try:
@@ -321,7 +299,7 @@ class LaptopShop:
                self.update_menu_and_stock()
                print(Fore.GREEN + f"Laptop with ID '{laptop_id}' updated successfully.")
       except Exception as e:
-         print(Fore.RED + f"An error occurred: {str(e)}")
+         print(Fore.RED + f"Invalid Input data.")
 
    def del_laptop(self, laptop_id):
       try:
@@ -337,21 +315,20 @@ class LaptopShop:
                self.update_menu_and_stock()
                print(Fore.GREEN + f"Laptop with ID '{laptop_id}' deleted successfully.")
       except Exception as e:
-         print(Fore.RED + f"An error occurred: {str(e)}")
-
+         print(Fore.RED + f"Invalid Input data.")
 
    def display_pembelian_history(shop):
       try:
          return shop.order_queue
       except Exception as e:
-         print(Fore.RED + f"An error occurred: {str(e)}")
+         print(Fore.RED + f"Invalid Input data.")
          return []
 
    def display_penyewaan_history(shop):
       try:
          return shop.order_queue
       except Exception as e:
-         print(Fore.RED + f"An error occurred: {str(e)}")
+         print(Fore.RED + f"Invalid Input data.")
          return []
 
    def display_menu_and_stock(self, order_type="pembelian", sorting_order=None):
@@ -376,7 +353,7 @@ class LaptopShop:
          else:
                raise ValueError("Invalid order type. Please choose 'pembelian' or 'penyewaan'.")
       except Exception as e:
-         print(Fore.RED + f"An error occurred: {str(e)}")
+         print(Fore.RED + f"Invalid Input data.")
          return []
 
    def sort_menu(self, sorting_order='asc'):
@@ -388,24 +365,15 @@ class LaptopShop:
          else:
                raise ValueError("Invalid sorting order. Please choose 'asc' for ascending or 'desc' for descending.")
       except Exception as e:
-         print(Fore.RED + f"An error occurred: {str(e)}")
+         print(Fore.RED + f"Invalid Input data.")
 
    def update_menu_and_stock(self):
       try:
          return self.barang
       except Exception as e:
-         print(Fore.RED + f"An error occurred: {str(e)}")
+         print(Fore.RED + f"Invalid Input data.")
          return []
 
-   def display_orders(self):
-      try:
-         return self.order_queue
-      except Exception as e:
-         print(Fore.RED + f"An error occurred: {str(e)}")
-         return []
-      
-
-      
    def search_menu(self, keyword):
       try:
          results = []
@@ -416,22 +384,19 @@ class LaptopShop:
                      break  
          return results
       except Exception as e:
-         print(Fore.RED + f"An error occurred: {str(e)}")
+         print(Fore.RED + f"Invalid Input data.")
          return []
-
 
    def update_menu_and_stock(self):
       try:
          self.barang = self.fetch_laptops_from_database()
       except Exception as e:
-         print(Fore.RED + f"An error occurred: {str(e)}")
-   
+         print(Fore.RED + f"Invalid Input data.")
+
    def add_new_admin(self, username, password, jobdesk):
       try:
             if not username.isalpha():
                raise ValueError("Username should only contain letters.")
-
-            # Lakukan pengecekan apakah admin dengan username tersebut sudah ada di database
             connection = self.connect_to_database()
             if connection:
                cursor = connection.cursor()
@@ -445,14 +410,12 @@ class LaptopShop:
                   connection.close()
                   print(Fore.GREEN + "Admin registered successfully!")
       except Exception as e:
-            print(Fore.RED + f"An error occurred: {str(e)}")
+            print(Fore.RED + f"Invalid Input data.")
 
    def add_new_customer(self, username, password, email, nohp):
       try:
             if not username.isalpha():
                raise ValueError("Username should only contain letters.")
-
-            # Lakukan pengecekan apakah customer dengan username tersebut sudah ada di database
             connection = self.connect_to_database()
             if connection:
                cursor = connection.cursor()
@@ -466,4 +429,4 @@ class LaptopShop:
                   connection.close()
                   print(Fore.GREEN + "Customer registered successfully!")
       except Exception as e:
-            print(Fore.RED + f"An error occurred: {str(e)}")
+            print(Fore.RED + f"Invalid Input data.")
