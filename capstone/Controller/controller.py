@@ -1,6 +1,6 @@
 from colorama import Fore
 from Model.model import Admin, Customer
-from View.view import display_menu_and_stock, display_pembelian_history, display_penyewaan_history
+from VIew.view import display_menu_and_stock, display_pembelian_history, display_penyewaan_history
 import pwinput
 
 def customer_actions(shop): 
