@@ -22,19 +22,20 @@ Program ini memberikan pengalaman pengguna yang ramah dan efisien baik untuk pel
 
 
   
-![Screenshot 2024-04-30 124346](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/26bf2b07-24be-437c-9856-dce17296dea3)
+![Screenshot 2024-05-01 143205](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/5947d6cd-2284-4c3c-a07d-2eb8796ace98)
+
 
   
-![Screenshot 2024-04-30 130515](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/a0bb19dc-76f5-4dfe-b864-b2ad68eaf414)
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/db40e96f-47ff-4976-afec-51a2195c21fa)
 
  
-![Screenshot 2024-04-30 130533](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/a62e3d5f-9d3c-4ccc-81cf-c2c895c255cf)
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/8b8bdd07-15c1-4a9d-b7e2-417a81bd9699)
 
 
-![Screenshot 2024-04-30 130547](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/fb333b97-2881-43d4-b723-8011c2faa5e6)
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/1f903cfd-0e90-4895-91dd-716fb2fedd25)
 
 
-![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/f3354e78-e608-42be-9983-c5acab7c862e)
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/2413f2c0-13d0-423a-bf81-5564bacb2356)
 
 
 
@@ -772,20 +773,27 @@ Import fore : untuk memberikan warna pada teks
 
 
 ```
-
-def display_menu_and_stock(menu, order_type="pembelian"):
+def display_menu_and_stock(menu, order_type="pembelian", limit=20, start_index=0):
     try:
         if menu:
             print("Menu and Stock:")
             table = PrettyTable()
             table.field_names = ["ID", "Nama Barang", "Harga", "Stock", "Spek"]
-            for item in menu:
+            if start_index == 0:
+                items_to_display = menu[:limit]
+            else:
+                items_to_display = menu[start_index:start_index+limit]
+            for item in items_to_display:
                 if order_type == "penyewaan":
                     harga = int(item['harga']) // 50
                 else:
                     harga = item['harga']
                 table.add_row([item['id_barang'], item['nama_barang'], harga, item['stock'], item['spek']])
             print(table)
+            if len(menu) > limit + start_index:
+                choice = input("Input '0' to view more items or press any other key to continue: ")
+                if choice == '0':
+                    display_menu_and_stock(menu, order_type, limit, start_index+limit)
         else:
             print(Fore.YELLOW + "No items found.")
     except Exception as e:
@@ -978,94 +986,139 @@ Def register_menu : untuk menampilkan menu pendaftaran agar pengguna bisa mendaf
 
 
 *Cara Penggunaan*
-![Screenshot 2024-04-30 233212](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/58d5a6e9-6469-49e5-9244-60ad5fda30c8)
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/288362d7-56f1-4318-9fcb-7166ca689a52)
+
 pilih menu yang di inginkan 
+
+
 jika memilih menu Login akan muncul seperti di bawah ini 
-![Screenshot 2024-04-30 233315](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/5bec7897-fc37-4ab6-9839-7e26d08aa4b3)
-pilih  rolenya dan masukkan username dan password anda
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/10cf2f98-d9d5-4d54-b324-fa794fbf3e11)
+
+pilih  rolenya dan masukkan username dan password anda jika ingin kembali ke menu utama ketik X
 setelah itu pilih pilih opsi yang tersedia
 
-![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/40819de2-8dbd-4034-b8a5-f60f5cb1478c)
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/bc6feaa2-1122-4d67-bc76-e1d99c1053e3)
 
-Jika anda memilih opsi 1 maka akan menampilkan nama barang yang ada beserta harga,stok dan spek barang.
+
+Jika anda memilih opsi 1 maka akan menampilkan nama barang yang ada beserta harga,stok dan spek barang jika ingin melihat semua daftar barang ketik 0,jika ingin langsung tekan enter.
+
+
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/9999cca3-f8c0-4875-b979-97831865e9b1)
+
+
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/bc78bac0-72ce-4c9d-97c9-7aff99617911)
+
 
 Jika ingin menambahkan barang ke dalam database pilih opsi 2 lalu masukkan nama.harga.stok dan spec laptop yang ingin di tambahkan ke database.
-![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/ad727b22-db38-4af3-b3f1-aba9b2fb9aab)
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/3ef7cd82-3367-4d1a-aed7-7934c7644a82)
 
 
-jika ingin update laptop pilih opsi 3 lalu masukkan id laptop,harga,stok dan spec laptop yang ingin di tambahkan ke database
 
-![Screenshot 2024-04-30 234849](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/36b6153f-554a-4718-b89c-424ce4478176)
+jika ingin update laptop pilih opsi 3 lalu masukkan id laptop,harga,stok dan spec laptop yang ingin di tambahkan ke database, laptop yang di update akan masuk ke dalam daftar barang.
 
-
-![Screenshot 2024-04-30 234910](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/236b9af2-bdab-4a04-abcf-b2c43bbe0384)
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/0d09d33e-dd13-4809-8749-b8aaa1c731dd)
 
 
-jika ingin menghapus laptop dari database pilih opsi 4, lalu masukkan id laptop yang ingin di hapus dari database
-![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/52e7866e-d8c3-4caa-8cc8-8b5a3b7ada24)
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/3caf4bc3-b62a-4d93-bf36-537365c9292e)
 
 
-![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/85ac617c-64c3-488f-8456-044dc3907499)
+jika ingin menghapus laptop dari database pilih opsi 4, lalu masukkan id laptop yang ingin di hapus dari database, laptop yang dihapus hilang dari tabel.
+
+
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/67fa476a-3abb-41dc-9d6c-381a53db784c)
+
+
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/c475e8e9-9145-4669-84d9-9918bda8333e)
+
+
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/095e5fed-6e61-4213-bdea-d2597d72c9ca)
+
+
+
+
 
 jika ingin melihat riwayat pesanan pilih opsi 5, jika ingin melihat riwayat pembelian ketik 1
 
-![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/09e2d643-3c53-4721-884a-1d527b46022a)
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/cdbd190f-322d-4a4a-a578-e18e59d13ec4)
 
 Jika ingin melihat riwayat penyewaan ketik 2
 
-![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/9f6c9f0d-6904-45da-a763-d8c400beef29)
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/cee7b9b0-b414-4e49-bb6e-a1c4ca37af92)
+
 
 jika ingin keluar pilih opsi 0
-![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/65730f3d-f1cf-4b43-b1ba-8b89f10bfed4)
-
-Jika ingin masuk sebagai Customer pilih login lalu ketik Customer,setelah itu masukkan username dan password anda,jika berhasil tampilannya akan mejadi seperti di bawah ini
-![Screenshot 2024-05-01 123922](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/82fce042-14e7-4ab8-bfd5-54be0c96746b)
-
-pilih opsi 1 jika ingin melihat daftar barang dan stok yang tersedia
-![Screenshot 2024-05-01 125436](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/fc38f8b3-6adb-4075-a3df-1fb7c3ca4ef8)
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/dd508a41-c0e8-4ebe-b434-e1a6e38b19fa)
 
 
-![Screenshot 2024-05-01 125453](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/f170e59d-8f10-4c59-a848-0bb97f3261bc)
+Jika ingin masuk sebagai Customer pilih login lalu ketik Customer,setelah itu masukkan username dan password anda, Ketik X jika ingin kembali,jika berhasil tampilannya akan mejadi seperti di bawah ini 
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/bc8a15e9-e8a1-4066-b4e4-b991d5c7afd0)
+
+
+pilih opsi 1 jika ingin melihat daftar barang dan stok yang tersedia, ketik 0 jika ingin melihat semua daftar barang 
+
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/0731e88e-a621-45e2-b5c3-231d49b12f70)
+
+
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/9dce5374-24d9-46a5-bf68-e046945ff24d)
 
 Pilih opsi 2 untuk mengurutkan barang
-![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/8b2e0894-8e74-499c-9ec8-c8528ffcac47)
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/27159a26-abce-4775-8cb7-f4780cee60c6)
 
 ketik asc jika ingin mengurutkan secara ascending
 
-![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/8a6e9f27-6343-4724-8bda-70d98ea0d45b)
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/c627734b-0ac2-4a43-942b-552489cf01e8)
+
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/8530e1b2-adf0-4611-a0db-d939b1b20019)
 
 
 ketik desc untuk mengurutkan secara descending
 
-![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/b9977cb6-874c-4d21-a448-2eb06d5eb38f)
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/f3361e7d-dbec-40cb-9145-e592ca266692)
+
+
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/433fada6-292e-4d7f-98b4-5429a6c876e7)
+
+
 
 Jika ingin mencari barang dalam toko pili opsi 3 lalu masukkan kategori laptop yang ingin di cari spserti nama,spec,harga,atau stok
 
-![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/5e917357-ddd6-4684-ba31-e1f9de952658)
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/b669d612-a5fd-4645-9b0c-fade231beb0e)
 
-![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/ede5a5ba-df8c-412e-bcdd-665488ecc6cc)
+
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/49be3742-186b-4155-be55-df8683f9e7c7)
+
+
 
 Untuk melakukan pesanan pilih opsi 4
-![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/b154f969-e60e-4454-a675-8d429ef995e0)
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/f50639ed-74f8-498d-8e26-cc9c5ef3821d)
 
 Jika ingin melakukan pembelian ketik pembelian, lalu masukkan id laptop dan jumlah barang yang akan di beli
 
-![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/8d4d5dfa-b8a1-4953-af67-a3e81ab1fc6f)
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/6fcfa6d6-5408-41e5-a190-a0e7ecf0d4ba)
+
 
 Jika ingin melakukan penyewaan ketik penyewaan, lalu masukkan id barang yang akan di sewa dan jumlah barangnya, setelah itu masukkan berapa lama barang akan di sewa beserta jaminannya, setelah itu program akan menampilkan barang yang di order,waktu sewa dan total harganya.
 
 
-![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/80597fe8-7dac-476e-9c2f-c9e0472ca21f)
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/18a2971a-a323-451c-be95-6fe7d2a27ba2)
 
 
-![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/f434ea13-d7c7-47ae-9719-c783c48f8064)
+Jika ingin mendaftar pilih menu register, lalu  pilih role, jika memilih admin masukkan username,password, dan jobdesk untuk regist.
 
 
-Jika ingin mendaftar pilih menu register, lalu masukkan role,username,email,nomor hp untuk regist.
-![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/9a1f6e29-1e48-4749-b4f2-60d443335485)
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/dbb2daa8-1b03-41ca-806a-0dd6247bddf5)
+
+
+Jika ingin mendaftarc pilih menu register, lalu pilih role, jika rolenya Customer masukkan username,password,email dan nomor hp.
+
+
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/9037188f-517c-4310-bdc9-53a4168ee6ca)
+
+
 
 Jika ingin keluar dari program pilih menu exit
-![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/7362b6de-87c7-4cc3-a735-cac6358f9148)
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/c2cdb1be-3483-4200-b5b1-bd6a2efb2316)
+
 
 
 
