@@ -1018,6 +1018,49 @@ Jika ingin melihat riwayat penyewaan ketik 2
 jika ingin keluar pilih opsi 0
 ![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/65730f3d-f1cf-4b43-b1ba-8b89f10bfed4)
 
+Jika ingin masuk sebagai Customer pilih login lalu ketik Customer,setelah itu masukkan username dan password anda,jika berhasil tampilannya akan mejadi seperti di bawah ini
+![Screenshot 2024-05-01 123922](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/82fce042-14e7-4ab8-bfd5-54be0c96746b)
+
+pilih opsi 1 jika ingin melihat daftar barang dan stok yang tersedia
+![Screenshot 2024-05-01 125436](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/fc38f8b3-6adb-4075-a3df-1fb7c3ca4ef8)
+
+
+![Screenshot 2024-05-01 125453](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/f170e59d-8f10-4c59-a848-0bb97f3261bc)
+
+Pilih opsi 2 untuk mengurutkan barang
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/8b2e0894-8e74-499c-9ec8-c8528ffcac47)
+
+ketik asc jika ingin mengurutkan secara ascending
+
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/8a6e9f27-6343-4724-8bda-70d98ea0d45b)
+
+
+ketik desc untuk mengurutkan secara descending
+
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/b9977cb6-874c-4d21-a448-2eb06d5eb38f)
+
+Jika ingin mencari barang dalam toko pili opsi 3 lalu masukkan kategori laptop yang ingin di cari spserti nama,spec,harga,atau stok
+
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/5e917357-ddd6-4684-ba31-e1f9de952658)
+
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/ede5a5ba-df8c-412e-bcdd-665488ecc6cc)
+
+Untuk melakukan pesanan pilih opsi 4
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/b154f969-e60e-4454-a675-8d429ef995e0)
+
+Jika ingin melakukan pembelian ketik pembelian, lalu masukkan id laptop dan jumlah barang yang akan di beli
+
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/8d4d5dfa-b8a1-4953-af67-a3e81ab1fc6f)
+
+Jika ingin melakukan penyewaan ketik penyewaan, lalu masukkan id barang yang akan di sewa dan jumlah barangnya, setelah itu masukkan berapa lama barang akan di sewa beserta jaminannya, setelah itu program akan menampilkan barang yang di order,waktu sewa dan total harganya.
+
+
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/80597fe8-7dac-476e-9c2f-c9e0472ca21f)
+
+
+![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/f434ea13-d7c7-47ae-9719-c783c48f8064)
+
+
 Jika ingin mendaftar pilih menu register, lalu masukkan role,username,email,nomor hp untuk regist.
 ![image](https://github.com/PAB23KELOMPOK5/PA_B23_KELOMPOK5/assets/145863352/9a1f6e29-1e48-4749-b4f2-60d443335485)
 
