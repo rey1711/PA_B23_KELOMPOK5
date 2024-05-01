@@ -6,7 +6,9 @@ import pwinput
 def customer_actions(shop): 
     while True:
         try:
-            customer_username = input("Enter your username: ")
+            customer_username = input("Enter your username (type 'X' to go back): ")
+            if customer_username.upper() == "X":
+                break
             customer_password = pwinput.pwinput(prompt="Enter your password: ")
             customer = Customer(customer_username, customer_password, shop)
             while True:
@@ -61,7 +63,9 @@ def customer_actions(shop):
 def admin_actions(shop):
     while True:
         try:
-            admin_username = input(Fore.GREEN + "Enter your username: ")
+            admin_username = input("Enter your username (type 'X' to go back): ")
+            if admin_username.upper() == "X":
+                break
             admin_password = pwinput.pwinput(prompt="Enter your password: ")
             admin = Admin(admin_username, admin_password, shop)
             while True:

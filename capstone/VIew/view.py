@@ -2,19 +2,27 @@ from prettytable import PrettyTable
 from colorama import Fore
 
 
-def display_menu_and_stock(menu, order_type="pembelian"):
+def display_menu_and_stock(menu, order_type="pembelian", limit=20, start_index=0):
     try:
         if menu:
             print("Menu and Stock:")
             table = PrettyTable()
             table.field_names = ["ID", "Nama Barang", "Harga", "Stock", "Spek"]
-            for item in menu:
+            if start_index == 0:
+                items_to_display = menu[:limit]
+            else:
+                items_to_display = menu[start_index:start_index+limit]
+            for item in items_to_display:
                 if order_type == "penyewaan":
                     harga = int(item['harga']) // 50
                 else:
                     harga = item['harga']
                 table.add_row([item['id_barang'], item['nama_barang'], harga, item['stock'], item['spek']])
             print(table)
+            if len(menu) > limit + start_index:
+                choice = input("Input '0' to view more items or press any other key to continue: ")
+                if choice == '0':
+                    display_menu_and_stock(menu, order_type, limit, start_index+limit)
         else:
             print(Fore.YELLOW + "No items found.")
     except Exception as e:

@@ -115,10 +115,12 @@ class Customer(User):
                            print(Fore.RED + f"Failed to insert transaction data.")
                         if order_type == "pembelian":
                            laptop['stock'] = str(stock - quantity)
+                           print(Fore.GREEN + f"Total Price : {total_harga}.")
                            print(Fore.GREEN + f"Order placed by {self.username}: {quantity} {nama_barang.capitalize()}(s)")
                         elif order_type == "penyewaan":
                            price_per_day = harga / 50
                            total_harga = price_per_day * days * quantity
+                           print(Fore.GREEN + f"Total Price : {total_harga}.")
                            print(Fore.GREEN + f"Order placed by {self.username}: {quantity} {nama_barang.capitalize()}(s) for {days} days. Total price: ${total_harga}")
                         found = True
                         break
